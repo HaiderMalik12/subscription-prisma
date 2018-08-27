@@ -7,17 +7,28 @@ import registerServiceWorker from './registerServiceWorker';
 const client = new ApolloClient({
   uri: 'http://localhost:4000'
 });
-
-client.query({
-  query: gql`
-    {
-      courses {
-        id
-        name
-        description
-      }
+const coursesRawQuery = gql`
+  {
+    courseFeed {
+      id
+      name
+      description
     }
-  `
-});
+  }
+`;
+console.log(coursesRawQuery);
+client
+  .query({
+    query: gql`
+      {
+        courseFeed {
+          id
+          name
+          description
+        }
+      }
+    `
+  })
+  .then(result => console.log(result));
 ReactDOM.render(<App />, document.getElementById('root'));
 registerServiceWorker();
