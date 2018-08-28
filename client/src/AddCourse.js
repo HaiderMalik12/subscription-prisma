@@ -13,6 +13,24 @@ const CREATE_COURSE_MUTATION = gql`
     }
   }
 `;
+// const COURSE_FEED_QUERY = gql`
+// courseFeed {
+//     id
+//     name
+//     description
+//     isPublished
+// }
+// `
+const COURSE_FEED_QUERY = gql`
+  {
+    courseFeed {
+      id
+      name
+      description
+      isPublished
+    }
+  }
+`;
 class AddCourse extends Component {
   state = {
     name: '',
@@ -31,11 +49,21 @@ class AddCourse extends Component {
         description: this.state.description
       }
     });
-    console.log('submitted');
   };
   render() {
     return (
-      <Mutation mutation={CREATE_COURSE_MUTATION}>
+      <Mutation
+        mutation={CREATE_COURSE_MUTATION}
+        update={(cache, { data: { createCourse } }) => {
+          const { courseFeed } = cache.readQuery({
+            query: COURSE_FEED_QUERY
+          });
+          cache.writeQuery({
+            query: COURSE_FEED_QUERY,
+            data: { courseFeed: courseFeed.concat([createCourse]) }
+          });
+        }}
+      >
         {(createCourse, { data }) => (
           <div className="conatiner center_div">
             <div className="card">
