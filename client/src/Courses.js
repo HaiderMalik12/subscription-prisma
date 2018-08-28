@@ -11,6 +11,7 @@ const Courses = () => {
         <p>Name: {course.name}</p>
         <p>Description: {course.description}</p>
         <p>IsPublished: {course.isPublished.toString()}</p>
+        <hr />
       </div>
     ));
   };
