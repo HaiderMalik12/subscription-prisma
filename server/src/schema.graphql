@@ -5,6 +5,7 @@ type Query {
   drafts: [Post!]!
   post(id: ID!): Post
   courseFeed: [Course!]!
+  findCourseById(id: ID!): Course!
 }
 
 type Mutation {

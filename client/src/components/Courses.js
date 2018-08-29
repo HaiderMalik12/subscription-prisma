@@ -8,18 +8,21 @@ const Courses = () => {
     if (loading) return <p>Loading ...</p>;
     if (error) return <p>Error</p>;
     return data.courseFeed.map(course => (
-      <div className="container" style={{ marginTop: '20px' }}>
-        <div key={course.id} className="row card" style={{ width: '18rem;' }}>
+      <div key={course.id} className="container" style={{ marginTop: '20px' }}>
+        <div className="row card">
           {/* <img
             className="card-img-top"
             src="https://source.unsplash.com/collection/1163637/480x480"
             alt="Card image cap"
           /> */}
           <div className="card-body">
-            <h5 class="card-title">{course.name}</h5>
+            <h5 className="card-title">{course.name}</h5>
             <p className="card-text">{course.description}</p>
-            <Link to="/course/:id/details" className="btn btn-primary">
-              Add To Cart
+            <Link
+              to={`/course/cjldkbdq58m4q0b00jzejh1no/edit`}
+              className="btn btn-primary"
+            >
+              Edit
             </Link>
           </div>
         </div>

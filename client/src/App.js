@@ -4,6 +4,7 @@ import Courses from './components/Courses';
 import AddCourse from './components/AddCourse';
 import Header from './components/Header';
 import { Switch, Route } from 'react-router-dom';
+import EditCourse from './components/EditCourse';
 
 class App extends Component {
   render() {
@@ -13,8 +14,8 @@ class App extends Component {
         <Switch>
           <Route exact path="/" component={Courses} />
           <Route exact path="/feed" component={Courses} />
-          {/* <Route exact path="/courses/published" component={Courses} /> */}
           <Route exact path="/add" component={AddCourse} />
+          <Route exact path="/course/:id/edit" component={EditCourse} />
         </Switch>
       </div>
     );
