@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import { withRouter } from 'react-router';
 
 class Header extends Component {
@@ -23,19 +23,19 @@ class Header extends Component {
         <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav">
             <li className="nav-item">
-              <Link className="nav-link" to="/feed">
+              <NavLink className="nav-link" to="/feed">
                 Feed
-              </Link>
+              </NavLink>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to="/published">
+              <NavLink className="nav-link" to="/published">
                 Published
-              </Link>
+              </NavLink>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to="/add">
+              <NavLink className="nav-link" to="/add">
                 Add Course
-              </Link>
+              </NavLink>
             </li>
           </ul>
         </div>

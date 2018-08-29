@@ -88,6 +88,9 @@ class AddCourse extends Component {
             data: { courseFeed: courseFeed.concat([createCourse]) }
           });
         }}
+        onCompleted={() => {
+          this.props.history.replace('/');
+        }}
       >
         {renderCreateCourse}
       </Mutation>
