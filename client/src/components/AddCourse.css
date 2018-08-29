@@ -1,4 +1,5 @@
 .center_div {
+  margin-top: 10px;
   margin: 0 auto;
   width: 80%; /* value of your choice which suits your alignment */
 }

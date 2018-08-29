@@ -34,7 +34,7 @@ class AddCourse extends Component {
   };
   render() {
     const renderCreateCourse = (createCourse, { data, error, loading }) => (
-      <div className="conatiner center_div">
+      <div className="conatiner center_div" style={{ marginTop: '20px' }}>
         <div className="card">
           <div className="card-title">
             <h3>Add Course</h3>
