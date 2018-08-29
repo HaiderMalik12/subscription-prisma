@@ -13,18 +13,10 @@ const COURSE_FEED_QUERY = gql`
   }
 `;
 class EditCourse extends Component {
-  //   state = {
-  //     name: '',
-  //     description: ''
-  //   };
   constructor(props) {
     super(props);
     this.nameInput = React.createRef();
     this.descInput = React.createRef();
-  }
-  componentDidMount() {
-    //send query to fetch single course
-    //set the state
   }
   submitCourse = async (createCourse, e) => {
     e.preventDefault();
@@ -37,7 +29,6 @@ class EditCourse extends Component {
     });
   };
   render() {
-    // const renderCreateCourse =
     return (
       <Query
         query={GET_COURSE_QUERY}
@@ -49,20 +40,6 @@ class EditCourse extends Component {
           return (
             <Mutation
               mutation={UPDATE_COURSE_MUTATION}
-              //   update={(cache, mutationResults) => {
-              //     const {
-              //       data: { createCourse }
-              //     } = mutationResults;
-              //     //get courseFeed from the cache
-              //     const { courseFeed } = cache.readQuery({
-              //       query: COURSE_FEED_QUERY
-              //     });
-              //     //update the courseFeed in the cache
-              //     cache.writeQuery({
-              //       query: COURSE_FEED_QUERY,
-              //       data: { courseFeed: courseFeed.concat([createCourse]) }
-              //     });
-              //   }}
               onCompleted={() => {
                 this.props.history.replace('/');
               }}
