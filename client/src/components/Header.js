@@ -23,7 +23,7 @@ class Header extends Component {
         <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav">
             <li className="nav-item">
-              <Link className="nav-link" to="courses/feed">
+              <Link className="nav-link" to="/feed">
                 Feed
               </Link>
             </li>
@@ -33,7 +33,7 @@ class Header extends Component {
               </Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to="courses/add">
+              <Link className="nav-link" to="/add">
                 Add Course
               </Link>
             </li>
