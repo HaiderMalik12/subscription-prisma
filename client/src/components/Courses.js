@@ -56,7 +56,6 @@ const Courses = () => {
                   query: COURSE_FEED_QUERY
                 });
                 //update the courseFeed in the cache
-                debugger;
                 cache.writeQuery({
                   query: COURSE_FEED_QUERY,
                   data: {
