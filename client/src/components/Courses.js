@@ -1,8 +1,28 @@
 import React from 'react';
 import { gql } from 'apollo-boost';
-import { Query } from 'react-apollo';
+import { Query, Mutation } from 'react-apollo';
 import { Link } from 'react-router-dom';
 
+const COURSE_FEED_QUERY = gql`
+  {
+    courseFeed {
+      id
+      name
+      description
+      isPublished
+    }
+  }
+`;
+const DELETE_COURSE_MUTATION = gql`
+  mutation DeleteCourse($id: ID!) {
+    deleteCourse(id: $id) {
+      id
+      name
+      description
+      isPublished
+    }
+  }
+`;
 const Courses = () => {
   const renderCourses = ({ loading, error, data }) => {
     if (loading) return <p>Loading ...</p>;
@@ -24,6 +44,46 @@ const Courses = () => {
             >
               Edit
             </Link>
+
+            <Mutation
+              mutation={DELETE_COURSE_MUTATION}
+              update={(cache, mutationResults) => {
+                const {
+                  data: { deleteCourse }
+                } = mutationResults;
+                //get courseFeed from the cache
+                const { courseFeed } = cache.readQuery({
+                  query: COURSE_FEED_QUERY
+                });
+                //update the courseFeed in the cache
+                debugger;
+                cache.writeQuery({
+                  query: COURSE_FEED_QUERY,
+                  data: {
+                    courseFeed: courseFeed.filter(
+                      course => course.id !== deleteCourse.id
+                    )
+                  }
+                });
+              }}
+            >
+              {(deletCourse, { data, error, loading }) => {
+                return (
+                  <button
+                    className="btn btn-danger"
+                    onClick={async () => {
+                      await deletCourse({
+                        variables: {
+                          id: course.id
+                        }
+                      });
+                    }}
+                  >
+                    Delete
+                  </button>
+                );
+              }}
+            </Mutation>
           </div>
         </div>
       </div>
