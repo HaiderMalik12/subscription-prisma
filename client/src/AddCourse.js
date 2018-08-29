@@ -74,10 +74,15 @@ class AddCourse extends Component {
     return (
       <Mutation
         mutation={CREATE_COURSE_MUTATION}
-        update={(cache, { data: { createCourse } }) => {
+        update={(cache, mutationResults) => {
+          const {
+            data: { createCourse }
+          } = mutationResults;
+          //get courseFeed from the cache
           const { courseFeed } = cache.readQuery({
             query: COURSE_FEED_QUERY
           });
+          //update the courseFeed in the cache
           cache.writeQuery({
             query: COURSE_FEED_QUERY,
             data: { courseFeed: courseFeed.concat([createCourse]) }
