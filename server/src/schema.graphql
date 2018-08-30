@@ -6,6 +6,7 @@ type Query {
   post(id: ID!): Post
   courseFeed: [Course!]!
   course(id: ID!): Course!
+  me: User
 }
 type AuthPayload {
   token: String
