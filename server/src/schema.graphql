@@ -7,7 +7,15 @@ type Query {
   courseFeed: [Course!]!
   course(id: ID!): Course!
 }
-
+type AuthPayload {
+  token: String
+  user: User
+}
+type User {
+  id: ID!
+  email: String!
+  courses: [Course!]!
+}
 type Mutation {
   createDraft(title: String!, text: String): Post
   createCourse(name: String!, description: String!): Course
