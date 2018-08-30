@@ -4,7 +4,7 @@ import Courses from './components/Courses';
 import AddCourse from './components/AddCourse';
 import Header from './components/Header';
 import { Switch, Route } from 'react-router-dom';
-import EditCourse from './components/EditCourse';
+import EditCourse from './components/EditCourse1';
 
 class App extends Component {
   render() {
