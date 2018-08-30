@@ -1,5 +1,6 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const { APP_SECRET, getUserId } = require('../utils');
 
 function createDraft(parent, { title, text }, ctx, info) {
   return ctx.db.mutation.createPost(
@@ -13,11 +14,17 @@ function createDraft(parent, { title, text }, ctx, info) {
   );
 }
 function createCourse(parent, { name, description }, ctx, info) {
+  const userId = getUserId(ctx);
   return ctx.db.mutation.createCourse(
     {
       data: {
         name,
-        description
+        description,
+        publishedBy: {
+          connect: {
+            id: userId
+          }
+        }
       }
     },
     info
@@ -55,10 +62,7 @@ async function signup(parent, args, context, info) {
     },
     `{ id }`
   );
-  const token = jwt.sign(
-    { userId: user.id },
-    process.env.APP_SECRET || 'AWSNBCCV'
-  );
+  const token = jwt.sign({ userId: user.id }, APP_SECRET);
   return {
     token,
     user
@@ -77,7 +81,7 @@ async function login(parent, args, context, info) {
   if (!valid) {
     throw new Error('Invalid password');
   }
-  const token = jwt.sign({ userId: user.id }, 'AWSNBCCV');
+  const token = jwt.sign({ userId: user.id }, APP_SECRET);
   return {
     token,
     user
