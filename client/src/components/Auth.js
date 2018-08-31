@@ -27,7 +27,6 @@ class Auth extends Component {
   };
 
   render() {
-    const { path } = this.props.match;
     const { isLogin } = this.state;
     return (
       <Mutation
