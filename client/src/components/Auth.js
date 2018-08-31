@@ -1,15 +1,25 @@
 import React, { Component } from 'react';
-import './Login.css';
+import './Auth.css';
 import { Mutation } from 'react-apollo';
 import { gql } from 'apollo-boost';
 import { saveToken } from '../utils';
 
-class Login extends Component {
+class Auth extends Component {
   state = {
     email: '',
     password: '',
-    login: true
+    isLogin: false
   };
+
+  static getDerivedStateFromProps(props) {
+    const { path } = props.match;
+    if (path === '/login') {
+      return { isLogin: true };
+    } else {
+      return { isLogin: false };
+    }
+  }
+
   onChangeHandler = event => {
     const name = event.target.name;
     const value = event.target.value;
@@ -18,9 +28,10 @@ class Login extends Component {
 
   render() {
     const { path } = this.props.match;
+    const { isLogin } = this.state;
     return (
       <Mutation
-        mutation={path === '/login' ? LOGIN_MUTATION : SIGNUP_MUTATION}
+        mutation={isLogin ? LOGIN_MUTATION : SIGNUP_MUTATION}
         variables={{ email: this.state.email, password: this.state.password }}
       >
         {(auth, { data, loading, error }) => {
@@ -33,7 +44,7 @@ class Login extends Component {
                 onSubmit={async e => {
                   e.preventDefault();
                   let token = '';
-                  if (path === '/login') {
+                  if (isLogin) {
                     const {
                       data: { login: authResults }
                     } = await auth();
@@ -49,7 +60,7 @@ class Login extends Component {
                 }}
               >
                 <h1 className="h3 mb-3 font-weight-normal">
-                  Please {path === '/login' ? 'sign in' : 'sign up'}
+                  Please {isLogin ? 'sign in' : 'sign up'}
                 </h1>
                 <label htmlFor="inputEmail" className="sr-only">
                   Email address
@@ -82,7 +93,7 @@ class Login extends Component {
                   className="btn btn-lg btn-primary btn-block"
                   type="submit"
                 >
-                  {path === '/login' ? 'Sign in' : 'Sign up'}
+                  {isLogin ? 'Sign in' : 'Sign up'}
                 </button>
               </form>
             </div>
@@ -112,4 +123,4 @@ export const SIGNUP_MUTATION = gql`
     }
   }
 `;
-export default Login;
+export default Auth;
