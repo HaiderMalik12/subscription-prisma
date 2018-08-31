@@ -7,20 +7,23 @@ import { saveToken } from '../utils';
 class Login extends Component {
   state = {
     email: '',
-    password: ''
+    password: '',
+    login: true
   };
   onChangeHandler = event => {
     const name = event.target.name;
     const value = event.target.value;
     this.setState({ [name]: value });
   };
+
   render() {
+    const { path } = this.props.match;
     return (
       <Mutation
-        mutation={LOGIN_MUTATION}
+        mutation={path === '/login' ? LOGIN_MUTATION : SIGNUP_MUTATION}
         variables={{ email: this.state.email, password: this.state.password }}
       >
-        {(login, { data, loading, error }) => {
+        {(auth, { data, loading, error }) => {
           if (error) return <div>Error</div>;
           if (loading) return <div>Loading</div>;
           return (
@@ -29,14 +32,25 @@ class Login extends Component {
                 className="form-signin"
                 onSubmit={async e => {
                   e.preventDefault();
-                  const {
-                    data: { login: authResults }
-                  } = await login();
-                  saveToken(authResults.token);
+                  let token = '';
+                  if (path === '/login') {
+                    const {
+                      data: { login: authResults }
+                    } = await auth();
+                    token = authResults.token;
+                  } else {
+                    const {
+                      data: { signup: authResults }
+                    } = await auth();
+                    token = authResults.token;
+                  }
+                  saveToken(token);
                   this.props.history.push('/');
                 }}
               >
-                <h1 className="h3 mb-3 font-weight-normal">Please sign in</h1>
+                <h1 className="h3 mb-3 font-weight-normal">
+                  Please {path === '/login' ? 'sign in' : 'sign up'}
+                </h1>
                 <label htmlFor="inputEmail" className="sr-only">
                   Email address
                 </label>
@@ -68,7 +82,7 @@ class Login extends Component {
                   className="btn btn-lg btn-primary btn-block"
                   type="submit"
                 >
-                  Sign in
+                  {path === '/login' ? 'Sign in' : 'Sign up'}
                 </button>
               </form>
             </div>
@@ -81,6 +95,16 @@ class Login extends Component {
 export const LOGIN_MUTATION = gql`
   mutation Login($email: String!, $password: String!) {
     login(email: $email, password: $password) {
+      token
+      user {
+        id
+      }
+    }
+  }
+`;
+export const SIGNUP_MUTATION = gql`
+  mutation Signup($email: String!, $password: String!) {
+    signup(email: $email, password: $password) {
       token
       user {
         id
