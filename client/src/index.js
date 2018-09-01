@@ -1,14 +1,53 @@
-import ApolloClient from 'apollo-boost';
 import React from 'react';
-import { ApolloProvider } from 'react-apollo';
 import ReactDOM from 'react-dom';
+import App from '../src/App';
+import { ApolloLink } from 'apollo-client-preset';
 import { BrowserRouter } from 'react-router-dom';
-import App from './App';
-import './index.css';
+
+import { ApolloProvider } from 'react-apollo';
+import { ApolloClient } from 'apollo-client';
+import { HttpLink } from 'apollo-link-http';
+import { InMemoryCache } from 'apollo-cache-inmemory';
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
-import registerServiceWorker from './registerServiceWorker';
+import './index.css';
+
+import { split } from 'apollo-link';
+import { WebSocketLink } from 'apollo-link-ws';
+import { getMainDefinition } from 'apollo-utilities';
+import { AUTH_TOKEN } from './utils';
+const wsLink = new WebSocketLink({
+  uri: 'ws://localhost:4000/',
+  options: {
+    reconnect: true
+  }
+});
+const httpLink = new HttpLink({ uri: 'http://localhost:4000' });
+
+const middlewareAuthLink = new ApolloLink((operation, forward) => {
+  const token = localStorage.getItem(AUTH_TOKEN);
+  const authorizationHeader = token ? `Bearer ${token}` : null;
+  operation.setContext({
+    headers: {
+      authorization: authorizationHeader
+    }
+  });
+  return forward(operation);
+});
+
+const httpLinkWithAuthToken = middlewareAuthLink.concat(httpLink);
+
+const link = split(
+  ({ query }) => {
+    const { kind, operation } = getMainDefinition(query);
+    return kind === 'OperationDefinition' && operation === 'subscription';
+  },
+  wsLink,
+  httpLinkWithAuthToken
+);
+
 const client = new ApolloClient({
-  uri: 'http://localhost:4000'
+  link,
+  cache: new InMemoryCache()
 });
 ReactDOM.render(
   <BrowserRouter>
@@ -18,4 +57,3 @@ ReactDOM.render(
   </BrowserRouter>,
   document.getElementById('root')
 );
-registerServiceWorker();

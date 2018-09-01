@@ -1,8 +1,8 @@
-import React from 'react';
 import { gql } from 'apollo-boost';
-import { Query, Mutation } from 'react-apollo';
+import React from 'react';
+import { Mutation, Query } from 'react-apollo';
 import { Link } from 'react-router-dom';
-import { AUTH_TOKEN, isAuth } from '../utils';
+import { AUTH_TOKEN } from '../utils';
 
 const COURSE_FEED_QUERY = gql`
   {

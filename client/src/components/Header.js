@@ -1,12 +1,9 @@
 import React, { Component } from 'react';
-import { Link, NavLink } from 'react-router-dom';
 import { withRouter } from 'react-router';
-import { isAuth, removeToken, AUTH_TOKEN } from '../utils';
+import { Link, NavLink } from 'react-router-dom';
+import { AUTH_TOKEN } from '../utils';
 
 class Header extends Component {
-  state = {
-    isAuth: false
-  };
   render() {
     const authToken = localStorage.getItem(AUTH_TOKEN);
     return (

@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
-import './AddCourse.css';
 import { gql } from 'apollo-boost';
+import React, { Component } from 'react';
 import { Mutation } from 'react-apollo';
+import './AddCourse.css';
 
 const COURSE_FEED_QUERY = gql`
   {
