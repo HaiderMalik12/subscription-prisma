@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { gql } from 'apollo-boost';
 import { Query, Mutation } from 'react-apollo';
 import ErrorMessage from './ErrorMessage';
+import Loading from './Loading/Loading';
 class EditCourse extends Component {
   state = {
     name: '',
@@ -20,7 +21,7 @@ class EditCourse extends Component {
         variables={{ id: this.props.match.params.id }}
       >
         {({ data: { course }, error, loading }) => {
-          if (loading) return <div>Loading....</div>;
+          if (loading) return <Loading />;
           if (error) return <ErrorMessage error={error} />;
           return (
             <Mutation
