@@ -4,7 +4,7 @@ type Query {
   feed: [Post!]!
   drafts: [Post!]!
   post(id: ID!): Post
-  courseFeed: [Course!]!
+  courseFeed(skip: Int, first: Int): [Course!]!
   course(id: ID!): Course!
   me: User
 }

@@ -8,8 +8,8 @@ function drafts(parent, args, ctx, info) {
 function post(parent, { id }, ctx, info) {
   return ctx.db.query.post({ where: { id } }, info);
 }
-function courseFeed(parent, args, ctx, info) {
-  return ctx.db.query.courses({ where: { isPublished: false } }, info);
+function courseFeed(parent, { first, skip }, ctx, info) {
+  return ctx.db.query.courses({ skip, first }, info);
 }
 function course(parent, { id }, ctx, info) {
   return ctx.db.query.course({ where: { id } }, info);
