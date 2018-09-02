@@ -1,98 +1,93 @@
 import React, { Component } from 'react';
 import './Auth.css';
-import { Mutation } from 'react-apollo';
 import { gql } from 'apollo-boost';
-import { saveToken } from '../utils';
+import { Mutation } from 'react-apollo';
+import { AUTH_TOKEN } from '../constants';
 
 class Auth extends Component {
   state = {
     email: '',
     password: '',
-    isLogin: false
+    loginStatus: false //check the route of the app it should be login or signup
   };
-
+  componentDidMount() {
+    console.log(this.props);
+  }
   static getDerivedStateFromProps(props) {
     const { path } = props.match;
     if (path === '/login') {
-      return { isLogin: true };
+      return { loginStatus: true };
     } else {
-      return { isLogin: false };
+      return { loginStatus: false };
     }
   }
-
-  onChangeHandler = event => {
-    const name = event.target.name;
-    const value = event.target.value;
+  onChangeHandler = e => {
+    const name = e.target.name;
+    const value = e.target.value;
     this.setState({ [name]: value });
   };
-
+  onSubmitHandler = async (authMutate, e) => {
+    e.preventDefault();
+    const authResults = await authMutate();
+    if (this.state.loginStatus) {
+      localStorage.setItem(AUTH_TOKEN, authResults.data.login.token);
+    } else {
+      localStorage.setItem(AUTH_TOKEN, authResults.data.signup.token);
+    }
+    this.props.history.push('/');
+  };
   render() {
-    const { isLogin } = this.state;
+    const { email, password } = this.state;
+    const { loginStatus } = this.state;
     return (
       <Mutation
-        mutation={isLogin ? LOGIN_MUTATION : SIGNUP_MUTATION}
-        variables={{ email: this.state.email, password: this.state.password }}
+        mutation={loginStatus ? LOGIN_MUTATION : SIGNUP_MUTATION}
+        variables={{ email, password }}
       >
-        {(auth, { data, loading, error }) => {
+        {(authMutate, { data, error, loading }) => {
           if (error) return <div>Error</div>;
-          if (loading) return <div>Loading</div>;
+          if (loading) return <div>....Loading</div>;
           return (
-            <div className="login-form">
+            <div className="auth-form">
               <form
                 className="form-signin"
-                onSubmit={async e => {
-                  e.preventDefault();
-                  let token = '';
-                  if (isLogin) {
-                    const {
-                      data: { login: authResults }
-                    } = await auth();
-                    token = authResults.token;
-                  } else {
-                    const {
-                      data: { signup: authResults }
-                    } = await auth();
-                    token = authResults.token;
-                  }
-                  saveToken(token);
-                  this.props.history.push('/');
-                }}
+                onSubmit={this.onSubmitHandler.bind(this, authMutate)}
               >
                 <h1 className="h3 mb-3 font-weight-normal">
-                  Please {isLogin ? 'sign in' : 'sign up'}
+                  Please {loginStatus ? 'sign in' : 'sign up'}
                 </h1>
                 <label htmlFor="inputEmail" className="sr-only">
                   Email address
                 </label>
                 <input
+                  name="email"
                   type="email"
                   id="inputEmail"
                   className="form-control"
                   placeholder="Email address"
+                  value={email}
                   onChange={this.onChangeHandler}
                   required
                   autoFocus
-                  value={this.state.email}
-                  name="email"
                 />
                 <label htmlFor="inputPassword" className="sr-only">
                   Password
                 </label>
                 <input
+                  name="password"
                   type="password"
                   id="inputPassword"
                   className="form-control"
                   placeholder="Password"
+                  value={password}
                   onChange={this.onChangeHandler}
                   required
-                  value={this.state.password}
-                  name="password"
                 />
                 <button
                   className="btn btn-lg btn-primary btn-block"
                   type="submit"
                 >
-                  {isLogin ? 'Sign in' : 'Sign up'}
+                  {loginStatus ? 'Login' : 'Signup'}
                 </button>
               </form>
             </div>
@@ -102,9 +97,9 @@ class Auth extends Component {
     );
   }
 }
-export const LOGIN_MUTATION = gql`
-  mutation Login($email: String!, $password: String!) {
-    login(email: $email, password: $password) {
+export const SIGNUP_MUTATION = gql`
+  mutation Signup($email: String!, $password: String!) {
+    signup(email: $email, password: $password) {
       token
       user {
         id
@@ -112,9 +107,9 @@ export const LOGIN_MUTATION = gql`
     }
   }
 `;
-export const SIGNUP_MUTATION = gql`
-  mutation Signup($email: String!, $password: String!) {
-    signup(email: $email, password: $password) {
+export const LOGIN_MUTATION = gql`
+  mutation Login($email: String!, $password: String!) {
+    login(email: $email, password: $password) {
       token
       user {
         id

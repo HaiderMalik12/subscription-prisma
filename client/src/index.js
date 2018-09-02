@@ -7,7 +7,7 @@ import './index.css';
 import { BrowserRouter } from 'react-router-dom';
 import App from './App';
 import registerServiceWorker from './registerServiceWorker';
-import { AUTH_TOKEN } from './utils';
+import { AUTH_TOKEN } from './constants';
 
 const client = new ApolloClient({
   uri: 'http://localhost:4000',

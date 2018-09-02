@@ -1,9 +1,9 @@
 html,
-body {
+.auth-form {
   height: 100%;
 }
 
-.login-form {
+.auth-form {
   display: -ms-flexbox;
   display: flex;
   -ms-flex-align: center;

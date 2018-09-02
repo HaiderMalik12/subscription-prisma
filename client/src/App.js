@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
+import { Switch, Route } from 'react-router';
 import './App.css';
 import Courses from './components/Courses';
-import AddCourse from './components/AddCourse';
+import CreateCourse from './components/CreateCourse';
 import Header from './components/Header';
-import { Switch, Route } from 'react-router-dom';
-import EditCourse from './components/EditCourse1';
-import { AuthRoute, UnauthRoute } from 'react-router-auth';
+import EditCourse from './components/EditCourse';
 import Auth from './components/Auth';
-import { AUTH_TOKEN } from './utils';
+import { AuthRoute, UnauthRoute } from 'react-router-auth';
+import { AUTH_TOKEN } from './constants';
+import NotFound from './components/NotFound';
 
 class App extends Component {
   render() {
@@ -21,26 +22,20 @@ class App extends Component {
             exact
             path="/login"
             component={Auth}
+            redirectTo="/"
             authenticated={isAuth}
-            redirectTo="/feed"
           />
           <UnauthRoute
             exact
             path="/signup"
             component={Auth}
-            authenticated={isAuth}
-            redirectTo="/feed"
-          />
-          <Route
-            exact
-            path="/feed"
-            component={Courses}
+            redirectTo="/"
             authenticated={isAuth}
           />
           <AuthRoute
             exact
-            path="/add"
-            component={AddCourse}
+            path="/create"
+            component={CreateCourse}
             redirectTo="/login"
             authenticated={isAuth}
           />
@@ -51,6 +46,7 @@ class App extends Component {
             redirectTo="/login"
             authenticated={isAuth}
           />
+          <Route component={NotFound} />
         </Switch>
       </div>
     );

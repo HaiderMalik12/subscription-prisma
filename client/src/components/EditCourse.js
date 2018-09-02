@@ -1,95 +1,89 @@
 import React, { Component } from 'react';
 import { gql } from 'apollo-boost';
-import { Mutation, Query } from 'react-apollo';
-
-const COURSE_FEED_QUERY = gql`
-  {
-    courseFeed {
-      id
-      name
-      description
-      isPublished
-    }
-  }
-`;
+import { Query, Mutation } from 'react-apollo';
+import ErrorMessage from './ErrorMessage';
 class EditCourse extends Component {
-  constructor(props) {
-    super(props);
-    this.nameInput = React.createRef();
-    this.descInput = React.createRef();
-  }
-  submitCourse = async (createCourse, e) => {
-    e.preventDefault();
-    await createCourse({
-      variables: {
-        id: this.props.match.params.id,
-        name: this.nameInput.current.value,
-        description: this.descInput.current.value
-      }
-    });
+  state = {
+    name: '',
+    description: ''
+  };
+  onChangeHandler = e => {
+    const name = e.target.name;
+    const value = e.target.value;
+    this.setState({ [name]: value });
   };
   render() {
+    const { name, description } = this.state;
     return (
       <Query
-        query={GET_COURSE_QUERY}
+        query={SINGLE_COURSE_QUERY}
         variables={{ id: this.props.match.params.id }}
       >
-        {({ data: { findCourseById: course }, error, loading }) => {
-          if (error) return <div> Error </div>;
-          if (loading) return <div> ....Loading </div>;
+        {({ data: { course }, error, loading }) => {
+          if (loading) return <div>Loading....</div>;
+          if (error) return <ErrorMessage error={error} />;
           return (
             <Mutation
               mutation={UPDATE_COURSE_MUTATION}
-              onCompleted={() => {
-                this.props.history.replace('/');
-              }}
+              onCompleted={() => this.props.history.push('/')}
             >
-              {(updateCourse, { data, error, loading }) => (
-                <div
-                  className="conatiner center_div"
-                  style={{ marginTop: '20px' }}
-                >
-                  <div className="card">
-                    <div className="card-title">
-                      <h3>Edit Course</h3>
-                    </div>
-                    <div className="card-body">
-                      <form
-                        onSubmit={this.submitCourse.bind(this, updateCourse)}
-                      >
-                        <div className="form-group">
-                          <label htmlFor="name">Name</label>
-                          <input
-                            name="name"
-                            type="text"
-                            className="form-control"
-                            placeholder="Enter name"
-                            defaultValue={course.name}
-                            ref={this.nameInput}
-                          />
-                        </div>
-                        <div className="form-group">
-                          <label htmlFor="description">Description</label>
-                          <textarea
-                            name="description"
-                            className="form-control"
-                            rows="3"
-                            defaultValue={course.description}
-                            ref={this.descInput}
-                          />
-                        </div>
-
-                        <button
-                          type="submit"
-                          className="btn btn-primary btn-block "
+              {(updateCourse, { data, error, loading }) => {
+                if (loading) return <div>Loading....</div>;
+                if (error) return <ErrorMessage error={error} />;
+                return (
+                  <div className="container">
+                    <div className="card">
+                      <div className="card-title">
+                        <h3>Create Course</h3>
+                      </div>
+                      <div className="card-body">
+                        <form
+                          onSubmit={async e => {
+                            e.preventDefault();
+                            await updateCourse({
+                              variables: {
+                                id: this.props.match.params.id,
+                                name: this.state.name,
+                                description: this.state.description
+                              }
+                            });
+                          }}
                         >
-                          Save
-                        </button>
-                      </form>
+                          <div className="form-group">
+                            <label htmlFor="name">Name</label>
+                            <input
+                              type="text"
+                              className="form-control"
+                              name="name"
+                              placeholder="Enter name"
+                              defaultValue={course.name}
+                              onChange={this.onChangeHandler}
+                            />
+                          </div>
+                          <div className="form-group">
+                            <label htmlFor="description">Description</label>
+                            <textarea
+                              className="form-control"
+                              name="description"
+                              placeholder="Enter description"
+                              rows="3"
+                              defaultValue={course.description}
+                              onChange={this.onChangeHandler}
+                            />
+                          </div>
+
+                          <button
+                            type="submit"
+                            className="btn btn-primary btn-block"
+                          >
+                            Save
+                          </button>
+                        </form>
+                      </div>
                     </div>
                   </div>
-                </div>
-              )}
+                );
+              }}
             </Mutation>
           );
         }}
@@ -97,23 +91,23 @@ class EditCourse extends Component {
     );
   }
 }
-const UPDATE_COURSE_MUTATION = gql`
-  mutation UpdateCourse($id: ID!, $name: String, $description: String) {
-    updateCourse(id: $id, name: $name, description: $description) {
-      name
+export const SINGLE_COURSE_QUERY = gql`
+  query Course($id: ID!) {
+    course(id: $id) {
       id
+      name
       description
       isPublished
     }
   }
 `;
-const GET_COURSE_QUERY = gql`
-  query GetCourseById($id: ID!) {
-    findCourseById(id: $id) {
+export const UPDATE_COURSE_MUTATION = gql`
+  mutation UpdateCourse($id: ID!, $name: String, $description: String) {
+    updateCourse(id: $id, name: $name, description: $description) {
       id
-      name
       description
       isPublished
+      name
     }
   }
 `;

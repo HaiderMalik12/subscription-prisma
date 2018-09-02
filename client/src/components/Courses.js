@@ -1,111 +1,95 @@
-import { gql } from 'apollo-boost';
 import React from 'react';
-import { Mutation, Query } from 'react-apollo';
+import { Query, Mutation } from 'react-apollo';
+import { gql } from 'apollo-boost';
 import { Link } from 'react-router-dom';
-import { AUTH_TOKEN } from '../utils';
+import { AUTH_TOKEN } from '../constants';
+import ErrorMessage from './ErrorMessage';
 
-const COURSE_FEED_QUERY = gql`
-  {
-    courseFeed {
-      id
-      name
-      description
-      isPublished
-    }
+class Courses extends React.Component {
+  render() {
+    const authToken = localStorage.getItem(AUTH_TOKEN);
+    return (
+      <div>
+        <Query query={COURSE_FEED_QUERY}>
+          {({ data, error, loading }) => {
+            if (loading) return <p>...Loading</p>;
+            if (error) return <ErrorMessage error={error} />;
+            return data.courseFeed.map(
+              ({ id, description, name, isPublished }) => {
+                return (
+                  <div key={id} className="card container">
+                    <div className="card-body">
+                      <h5 className="card-title">{name}</h5>
+                      <p className="card-text"> {description} </p>
+                      {authToken ? (
+                        <React.Fragment>
+                          <Link
+                            to={`course/${id}/edit`}
+                            className="btn btn-primary"
+                          >
+                            Edit
+                          </Link>
+                          <Mutation
+                            mutation={DELETE_COURSE_MUTATION}
+                            variables={{ id }}
+                            update={(cache, { data: { deleteCourse } }) => {
+                              const { courseFeed } = cache.readQuery({
+                                query: COURSE_FEED_QUERY
+                              });
+                              cache.writeQuery({
+                                query: COURSE_FEED_QUERY,
+                                data: {
+                                  courseFeed: courseFeed.filter(
+                                    course => course.id !== deleteCourse.id
+                                  )
+                                }
+                              });
+                            }}
+                          >
+                            {(deleteCourse, { data, error, loading }) => {
+                              return (
+                                <button
+                                  style={{ marginLeft: '10px' }}
+                                  className="btn btn-danger"
+                                  onClick={async () => {
+                                    await deleteCourse();
+                                  }}
+                                >
+                                  Delete
+                                </button>
+                              );
+                            }}
+                          </Mutation>
+                        </React.Fragment>
+                      ) : null}
+                    </div>
+                  </div>
+                );
+              }
+            );
+          }}
+        </Query>
+      </div>
+    );
   }
-`;
-const DELETE_COURSE_MUTATION = gql`
-  mutation DeleteCourse($id: ID!) {
+}
+
+export const DELETE_COURSE_MUTATION = gql`
+  mutation DeletCourse($id: ID!) {
     deleteCourse(id: $id) {
       id
       name
+    }
+  }
+`;
+export const COURSE_FEED_QUERY = gql`
+  {
+    courseFeed {
+      id
       description
+      name
       isPublished
     }
   }
 `;
-const Courses = () => {
-  const renderCourses = ({ loading, error, data }) => {
-    const authToken = localStorage.getItem(AUTH_TOKEN);
-    if (loading) return <p>Loading ...</p>;
-    if (error) return <p>Error</p>;
-    return data.courseFeed.map(course => (
-      <div key={course.id} className="container" style={{ marginTop: '20px' }}>
-        <div className="row card">
-          <div className="card-body">
-            <h5 className="card-title">{course.name}</h5>
-            <p className="card-text">{course.description}</p>
-            {authToken && (
-              <React.Fragment>
-                <Link
-                  to={`/course/cjldkbdq58m4q0b00jzejh1no/edit`}
-                  className="btn btn-primary"
-                >
-                  Edit
-                </Link>
-                <Mutation
-                  mutation={DELETE_COURSE_MUTATION}
-                  update={(cache, mutationResults) => {
-                    const {
-                      data: { deleteCourse }
-                    } = mutationResults;
-                    //get courseFeed from the cache
-                    const { courseFeed } = cache.readQuery({
-                      query: COURSE_FEED_QUERY
-                    });
-                    //update the courseFeed in the cache
-                    cache.writeQuery({
-                      query: COURSE_FEED_QUERY,
-                      data: {
-                        courseFeed: courseFeed.filter(
-                          course => course.id !== deleteCourse.id
-                        )
-                      }
-                    });
-                  }}
-                >
-                  {(deletCourse, { data, error, loading }) => {
-                    return (
-                      <button
-                        className="btn btn-danger"
-                        onClick={async () => {
-                          await deletCourse({
-                            variables: {
-                              id: course.id
-                            }
-                          });
-                        }}
-                      >
-                        Delete
-                      </button>
-                    );
-                  }}
-                </Mutation>
-              </React.Fragment>
-            )}
-          </div>
-        </div>
-      </div>
-    ));
-  };
-  return (
-    <div>
-      <Query
-        query={gql`
-          {
-            courseFeed {
-              id
-              name
-              description
-              isPublished
-            }
-          }
-        `}
-      >
-        {renderCourses}
-      </Query>
-    </div>
-  );
-};
-
 export default Courses;
