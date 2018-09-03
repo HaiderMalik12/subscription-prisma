@@ -4,9 +4,13 @@ type Query {
   feed: [Post!]!
   drafts: [Post!]!
   post(id: ID!): Post
-  courseFeed(skip: Int, first: Int): [Course!]!
+  courseFeed(skip: Int, first: Int): CourseFeed!
   course(id: ID!): Course!
   me: User
+}
+type CourseFeed {
+  courses: [Course!]!
+  count: Int!
 }
 type AuthPayload {
   token: String

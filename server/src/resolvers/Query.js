@@ -8,8 +8,22 @@ function drafts(parent, args, ctx, info) {
 function post(parent, { id }, ctx, info) {
   return ctx.db.query.post({ where: { id } }, info);
 }
-function courseFeed(parent, { first, skip }, ctx, info) {
-  return ctx.db.query.courses({ skip, first }, info);
+async function courseFeed(parent, { first, skip }, ctx, info) {
+  const courses = await ctx.db.query.courses({ skip, first }, `{id}`);
+  const selectionCount = `{
+    aggregate {
+      count
+    }
+  }
+    `;
+  const coursesConnection = await ctx.db.query.coursesConnection(
+    {},
+    selectionCount
+  );
+  return {
+    count: coursesConnection.aggregate.count,
+    courseIds: courses.map(course => course.id)
+  };
 }
 function course(parent, { id }, ctx, info) {
   return ctx.db.query.course({ where: { id } }, info);

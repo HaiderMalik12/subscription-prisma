@@ -3,12 +3,14 @@ const { Prisma } = require('prisma-binding');
 const Query = require('./resolvers/Query');
 const Mutation = require('./resolvers/Mutation');
 const AuthPayload = require('./resolvers/AuthPayload');
+const CourseFeed = require('./resolvers/CourseFeed');
 require('dotenv').config();
 
 const resolvers = {
   Query,
   Mutation,
-  AuthPayload
+  AuthPayload,
+  CourseFeed
 };
 console.log(process.env.PORT);
 const server = new GraphQLServer({
