@@ -1,16 +1,15 @@
 import React from 'react';
-import LoadingIcon from './loading_icon.gif';
-
-const Loading = () => {
+import spinner from './spinner.gif';
+const Spinner = () => {
   return (
-    <div>
+    <React.Fragment>
       <img
-        src={LoadingIcon}
+        src={spinner}
         alt="...Loading"
         style={{ width: '200px', margin: 'auto', display: 'block' }}
       />
-    </div>
+    </React.Fragment>
   );
 };
 
-export default Loading;
+export default Spinner;

@@ -3,7 +3,7 @@ import { Mutation } from 'react-apollo';
 import { gql } from 'apollo-boost';
 import { COURSE_FEED_QUERY } from './Courses';
 import ErrorMessage from './ErrorMessage';
-import Loading from './Loading/Loading';
+import Spinner from './Spinner/Spinner';
 
 class CreateCourse extends Component {
   state = {
@@ -36,7 +36,7 @@ class CreateCourse extends Component {
         }}
       >
         {(createCourse, { data, error, loading }) => {
-          if (loading) return <Loading />;
+          if (loading) return <Spinner />;
           if (error) return <ErrorMessage error={error} />;
           return (
             <div className="container">

@@ -1,16 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+
 const ErrorMessage = ({ error }) => {
   return (
-    <div>
+    <React.Fragment>
       <div className="alert alert-danger" role="alert">
         Something went wrong
       </div>
       <pre>{error.toString()}</pre>
-    </div>
+    </React.Fragment>
   );
 };
+ErrorMessage.defaultProps = {
+  error: {}
+};
 ErrorMessage.propTypes = {
-  error: PropTypes.any
+  error: PropTypes.object.isRequired
 };
 export default ErrorMessage;

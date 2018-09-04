@@ -4,31 +4,20 @@ import { gql } from 'apollo-boost';
 import { Link } from 'react-router-dom';
 import { AUTH_TOKEN, COURSES_PER_PAGE } from '../constants';
 import ErrorMessage from './ErrorMessage';
-import Loading from './Loading/Loading';
+import Spinner from './Spinner/Spinner';
 
 class Courses extends React.Component {
   state = {
     page: 1
   };
-  getQueryVariable = () => {
+  getQueryVariables = () => {
     const { page } = this.state;
-    const skip = (page - 1) * COURSES_PER_PAGE;
     const first = COURSES_PER_PAGE;
+    const skip = (page - 1) * COURSES_PER_PAGE;
     return {
       first,
       skip
     };
-  };
-  nextPage = data => {
-    const { page } = this.state;
-    const results = page <= data.courseFeed.count / COURSES_PER_PAGE;
-    if (results) {
-      this.setState(prevState => {
-        return {
-          page: prevState.page + 1
-        };
-      });
-    }
   };
   prevPage = () => {
     const { page } = this.state;
@@ -38,13 +27,21 @@ class Courses extends React.Component {
       }));
     }
   };
+  nextPage = data => {
+    const { page } = this.state;
+    if (page <= data.courseFeed.count / COURSES_PER_PAGE) {
+      this.setState(prevState => ({
+        page: prevState.page + 1
+      }));
+    }
+  };
   render() {
     const authToken = localStorage.getItem(AUTH_TOKEN);
     return (
       <div>
-        <Query query={COURSE_FEED_QUERY} variables={this.getQueryVariable()}>
+        <Query query={COURSE_FEED_QUERY} variables={this.getQueryVariables()}>
           {({ data, error, loading }) => {
-            if (loading) return <Loading />;
+            if (loading) return <Spinner />;
             if (error) return <ErrorMessage error={error} />;
             return (
               <React.Fragment>
@@ -82,17 +79,15 @@ class Courses extends React.Component {
                               >
                                 {(deleteCourse, { data, error, loading }) => {
                                   return (
-                                    <React.Fragment>
-                                      <button
-                                        style={{ marginLeft: '10px' }}
-                                        className="btn btn-danger"
-                                        onClick={async () => {
-                                          await deleteCourse();
-                                        }}
-                                      >
-                                        Delete
-                                      </button>
-                                    </React.Fragment>
+                                    <button
+                                      style={{ marginLeft: '10px' }}
+                                      className="btn btn-danger"
+                                      onClick={async () => {
+                                        await deleteCourse();
+                                      }}
+                                    >
+                                      Delete
+                                    </button>
                                   );
                                 }}
                               </Mutation>
@@ -114,6 +109,7 @@ class Courses extends React.Component {
                         Previous
                       </div>
                     </li>
+
                     <li className="page-item">
                       <div
                         className="page-link"
@@ -145,18 +141,13 @@ export const DELETE_COURSE_MUTATION = gql`
 export const COURSE_FEED_QUERY = gql`
   query CourseFeed($first: Int, $skip: Int) {
     courseFeed(first: $first, skip: $skip) {
+      count
       courses {
-        createdAt
         id
         description
         name
         isPublished
-        publishedBy {
-          id
-          email
-        }
       }
-      count
     }
   }
 `;
