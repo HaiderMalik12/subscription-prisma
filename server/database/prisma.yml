@@ -1,5 +1,5 @@
 # The endpoint of your Prisma API (deployed to a Prisma Sandbox).
-endpoint: https://eu1.prisma.sh/haidermalik504/prisam-db/dev
+# endpoint: https://eu1.prisma.sh/haidermalik504/prisam-db/dev
 
 # The file containing the definition of your data model.
 datamodel: datamodel.graphql
@@ -19,3 +19,4 @@ hooks:
 # Info: https://www.prisma.io/docs/reference/prisma-api/concepts-utee3eiquo#authentication
 # secret: mysecret123
 
+endpoint: http://localhost:4466

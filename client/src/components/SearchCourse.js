@@ -4,6 +4,9 @@ import { withApollo } from 'react-apollo';
 import PropTypes from 'prop-types';
 import Course from './Course';
 import Spinner from './Spinner/Spinner';
+import { COURSE_FEED_QUERY } from './Courses';
+import { COURSES_PER_PAGE, AUTH_TOKEN } from '../constants';
+import { Link } from 'react-router-dom';
 
 class SearchCourse extends Component {
   state = {
@@ -29,6 +32,7 @@ class SearchCourse extends Component {
     });
   };
   render() {
+    const authToken = localStorage.getItem(AUTH_TOKEN);
     return (
       <div className="container" style={{ marginTop: '20px' }}>
         <form onSubmit={this.executeSearch}>
@@ -49,8 +53,20 @@ class SearchCourse extends Component {
           </div>
         </form>
         {this.state.loading && <Spinner />}
-        {this.state.courses.map(course => {
-          return <Course course={course} key={course.id} />;
+        {this.state.courses.map(({ id, name, description }) => {
+          return (
+            <div className="card container">
+              <div className="card-body">
+                <h5 className="card-title">{name}</h5>
+                <p className="card-text"> {description} </p>
+                {authToken && (
+                  <Link className="btn btn-primary" to={`course/${id}/edit`}>
+                    Edit{' '}
+                  </Link>
+                )}
+              </div>
+            </div>
+          );
         })}
       </div>
     );

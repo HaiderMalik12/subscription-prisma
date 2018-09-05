@@ -2,10 +2,11 @@ import React, { Component } from 'react';
 import { Query, Mutation } from 'react-apollo';
 import { gql } from 'apollo-boost';
 import { Link } from 'react-router-dom';
-import { AUTH_TOKEN } from '../constants';
+import { AUTH_TOKEN, COURSES_PER_PAGE } from '../constants';
 import ErrorMessage from './ErrorMessage';
 import Spinner from './Spinner/Spinner';
 import { COURSE_FEED_QUERY } from './Courses';
+import PropTypes from 'prop-types';
 
 class Course extends Component {
   render() {
@@ -25,17 +26,8 @@ class Course extends Component {
                 mutation={DELETE_COURSE_MUTATION}
                 variables={{ id }}
                 update={(cache, { data: { deleteCourse } }) => {
-                  const { courseFeed } = cache.readQuery({
-                    query: COURSE_FEED_QUERY
-                  });
-                  cache.writeQuery({
-                    query: COURSE_FEED_QUERY,
-                    data: {
-                      courseFeed: courseFeed.filter(
-                        course => course.id !== deleteCourse.id
-                      )
-                    }
-                  });
+                  debugger;
+                  this.props.updateCacheAfterDelete(cache, deleteCourse);
                 }}
               >
                 {(deleteCourse, { data, error, loading }) => {
@@ -59,6 +51,9 @@ class Course extends Component {
     );
   }
 }
+Course.propTypes = {
+  updateCacheAfterDelete: PropTypes.func.isRequired
+};
 export const DELETE_COURSE_MUTATION = gql`
   mutation DeletCourse($id: ID!) {
     deleteCourse(id: $id) {

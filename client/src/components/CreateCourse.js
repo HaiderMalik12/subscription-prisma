@@ -4,6 +4,7 @@ import { gql } from 'apollo-boost';
 import { COURSE_FEED_QUERY } from './Courses';
 import ErrorMessage from './ErrorMessage';
 import Spinner from './Spinner/Spinner';
+import { COURSES_PER_PAGE } from '../constants';
 
 class CreateCourse extends Component {
   state = {
@@ -23,14 +24,21 @@ class CreateCourse extends Component {
         onCompleted={() => this.props.history.push('/')}
         update={(cache, { data: { createCourse } }) => {
           //fetch the courseFeed from the cache
-          const { courseFeed } = cache.readQuery({
-            query: COURSE_FEED_QUERY
+          const first = COURSES_PER_PAGE;
+          const skip = 0;
+          const orderBy = 'createdAt_DESC';
+          const data = cache.readQuery({
+            query: COURSE_FEED_QUERY,
+            variables: { first, skip, orderBy }
           });
-          //update the courseFeed from the cache
+          data.courseFeed.courses.unshift(createCourse);
           cache.writeQuery({
             query: COURSE_FEED_QUERY,
-            data: {
-              courseFeed: courseFeed.concat([createCourse])
+            data,
+            variables: {
+              first: COURSES_PER_PAGE,
+              skip: 0,
+              orderBy: 'createdAt_DESC'
             }
           });
         }}

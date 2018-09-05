@@ -8,13 +8,16 @@ function drafts(parent, args, ctx, info) {
 function post(parent, { id }, ctx, info) {
   return ctx.db.query.post({ where: { id } }, info);
 }
-async function courseFeed(parent, { first, skip, filter }, ctx, info) {
+async function courseFeed(parent, { first, skip, filter, orderBy }, ctx, info) {
   const where = filter
-  ? {
-      OR: [{ name_contains: filter }, { description_contains: filter }]
-    }
-  : {};
-const courses = await ctx.db.query.courses({ where, skip, first }, `{id}`);
+    ? {
+        OR: [{ name_contains: filter }, { description_contains: filter }]
+      }
+    : {};
+  const courses = await ctx.db.query.courses(
+    { where, skip, first, orderBy },
+    `{id}`
+  );
   const selectionCount = `{
     aggregate {
       count
