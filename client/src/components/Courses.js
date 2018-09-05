@@ -5,7 +5,6 @@ import { Link } from 'react-router-dom';
 import { AUTH_TOKEN, COURSES_PER_PAGE } from '../constants';
 import ErrorMessage from './ErrorMessage';
 import Spinner from './Spinner/Spinner';
-import Course from './Course';
 
 class Courses extends React.Component {
   state = {
@@ -15,11 +14,10 @@ class Courses extends React.Component {
     const { page } = this.state;
     const first = COURSES_PER_PAGE;
     const skip = (page - 1) * COURSES_PER_PAGE;
-    const orderBy = 'createdAt_DESC';
     return {
       first,
       skip,
-      orderBy
+      orderBy: 'createdAt_DESC'
     };
   };
   prevPage = () => {
@@ -39,29 +37,27 @@ class Courses extends React.Component {
     }
   };
   updateCacheAfterDelete = (cache, deleteCourse) => {
-    debugger;
+    const { page } = this.state;
+    const variables = {
+      first: COURSES_PER_PAGE,
+      skip: (page - 1) * COURSES_PER_PAGE,
+      orderBy: 'createdAt_DESC'
+    };
     const data = cache.readQuery({
       query: COURSE_FEED_QUERY,
-      variables: {
-        first: COURSES_PER_PAGE,
-        skip: 0,
-        orderBy: 'createdAt_DESC'
-      }
+      variables,
+      data
     });
-    debugger;
+
     const index = data.courseFeed.courses.findIndex(
       course => course.id === deleteCourse.id
     );
     data.courseFeed.courses.splice(index, 1);
-    debugger;
+
     cache.writeQuery({
       query: COURSE_FEED_QUERY,
       data,
-      variables: {
-        first: COURSES_PER_PAGE,
-        skip: 0,
-        orderBy: 'createdAt_DESC'
-      }
+      variables
     });
   };
   render() {

@@ -26,20 +26,16 @@ class CreateCourse extends Component {
           //fetch the courseFeed from the cache
           const first = COURSES_PER_PAGE;
           const skip = 0;
-          const orderBy = 'createdAt_DESC';
           const data = cache.readQuery({
             query: COURSE_FEED_QUERY,
-            variables: { first, skip, orderBy }
+            variables: { first, skip, orderBy: 'createdAt_DESC' }
           });
+          //update the courseFeed from the cache
           data.courseFeed.courses.unshift(createCourse);
           cache.writeQuery({
             query: COURSE_FEED_QUERY,
-            data,
-            variables: {
-              first: COURSES_PER_PAGE,
-              skip: 0,
-              orderBy: 'createdAt_DESC'
-            }
+            variables: { first, skip, orderBy: 'createdAt_DESC' },
+            data
           });
         }}
       >
