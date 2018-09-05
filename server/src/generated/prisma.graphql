@@ -1,5 +1,5 @@
-# source: https://eu1.prisma.sh/haidermalik504/prisam-db/dev
-# timestamp: Mon Sep 03 2018 14:59:26 GMT+0500 (PKT)
+# source: http://localhost:4466
+# timestamp: Wed Sep 05 2018 14:33:31 GMT+0500 (PKT)
 
 type AggregateCourse {
   count: Int!
@@ -23,7 +23,7 @@ type Course implements Node {
   isPublished: Boolean!
   name: String!
   description: String!
-  publishedBy(where: UserWhereInput): User
+  postedBy(where: UserWhereInput): User
   createdAt: DateTime!
 }
 
@@ -41,15 +41,15 @@ input CourseCreateInput {
   isPublished: Boolean
   name: String!
   description: String!
-  publishedBy: UserCreateOneWithoutCoursesInput
+  postedBy: UserCreateOneWithoutCoursesInput
 }
 
-input CourseCreateManyWithoutPublishedByInput {
-  create: [CourseCreateWithoutPublishedByInput!]
+input CourseCreateManyWithoutPostedByInput {
+  create: [CourseCreateWithoutPostedByInput!]
   connect: [CourseWhereUniqueInput!]
 }
 
-input CourseCreateWithoutPublishedByInput {
+input CourseCreateWithoutPostedByInput {
   isPublished: Boolean
   name: String!
   description: String!
@@ -130,33 +130,33 @@ input CourseUpdateInput {
   isPublished: Boolean
   name: String
   description: String
-  publishedBy: UserUpdateOneWithoutCoursesInput
+  postedBy: UserUpdateOneWithoutCoursesInput
 }
 
-input CourseUpdateManyWithoutPublishedByInput {
-  create: [CourseCreateWithoutPublishedByInput!]
+input CourseUpdateManyWithoutPostedByInput {
+  create: [CourseCreateWithoutPostedByInput!]
   connect: [CourseWhereUniqueInput!]
   disconnect: [CourseWhereUniqueInput!]
   delete: [CourseWhereUniqueInput!]
-  update: [CourseUpdateWithWhereUniqueWithoutPublishedByInput!]
-  upsert: [CourseUpsertWithWhereUniqueWithoutPublishedByInput!]
+  update: [CourseUpdateWithWhereUniqueWithoutPostedByInput!]
+  upsert: [CourseUpsertWithWhereUniqueWithoutPostedByInput!]
 }
 
-input CourseUpdateWithoutPublishedByDataInput {
+input CourseUpdateWithoutPostedByDataInput {
   isPublished: Boolean
   name: String
   description: String
 }
 
-input CourseUpdateWithWhereUniqueWithoutPublishedByInput {
+input CourseUpdateWithWhereUniqueWithoutPostedByInput {
   where: CourseWhereUniqueInput!
-  data: CourseUpdateWithoutPublishedByDataInput!
+  data: CourseUpdateWithoutPostedByDataInput!
 }
 
-input CourseUpsertWithWhereUniqueWithoutPublishedByInput {
+input CourseUpsertWithWhereUniqueWithoutPostedByInput {
   where: CourseWhereUniqueInput!
-  update: CourseUpdateWithoutPublishedByDataInput!
-  create: CourseCreateWithoutPublishedByInput!
+  update: CourseUpdateWithoutPostedByDataInput!
+  create: CourseCreateWithoutPostedByInput!
 }
 
 input CourseWhereInput {
@@ -314,7 +314,7 @@ input CourseWhereInput {
 
   """All values greater than or equal the given value."""
   createdAt_gte: DateTime
-  publishedBy: UserWhereInput
+  postedBy: UserWhereInput
 }
 
 input CourseWhereUniqueInput {
@@ -659,7 +659,7 @@ type UserConnection {
 input UserCreateInput {
   email: String!
   password: String!
-  courses: CourseCreateManyWithoutPublishedByInput
+  courses: CourseCreateManyWithoutPostedByInput
 }
 
 input UserCreateOneWithoutCoursesInput {
@@ -742,7 +742,7 @@ input UserSubscriptionWhereInput {
 input UserUpdateInput {
   email: String
   password: String
-  courses: CourseUpdateManyWithoutPublishedByInput
+  courses: CourseUpdateManyWithoutPostedByInput
 }
 
 input UserUpdateOneWithoutCoursesInput {
