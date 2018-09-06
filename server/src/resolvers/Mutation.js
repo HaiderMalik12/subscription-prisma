@@ -20,7 +20,7 @@ function createCourse(parent, { name, description }, ctx, info) {
       data: {
         name,
         description,
-        publishedBy: {
+        postedBy: {
           connect: {
             id: userId
           }

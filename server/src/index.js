@@ -1,16 +1,19 @@
 const { GraphQLServer } = require('graphql-yoga');
 const { Prisma } = require('prisma-binding');
+
+require('dotenv').config();
 const Query = require('./resolvers/Query');
 const Mutation = require('./resolvers/Mutation');
 const AuthPayload = require('./resolvers/AuthPayload');
 const CourseFeed = require('./resolvers/CourseFeed');
-require('dotenv').config();
+const Subscription = require('./resolvers/Subscription');
 
 const resolvers = {
   Query,
   Mutation,
   AuthPayload,
-  CourseFeed
+  CourseFeed,
+  Subscription
 };
 console.log(process.env.PORT);
 const server = new GraphQLServer({
