@@ -7,17 +7,13 @@ const Mutation = require('./resolvers/Mutation');
 const AuthPayload = require('./resolvers/AuthPayload');
 const CourseFeed = require('./resolvers/CourseFeed');
 const Subscription = require('./resolvers/Subscription');
-console.log(Subscription);
-const { forwardTo } = require('prisma-binding');
 
 const resolvers = {
   Query,
   Mutation,
   AuthPayload,
   CourseFeed,
-  Subscription: {
-    course: forwardTo('db')
-  }
+  Subscription
 };
 // console.log(process.env.PORT);
 const server = new GraphQLServer({
