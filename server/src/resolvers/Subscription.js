@@ -1,19 +1,12 @@
-async function newCourseSubsribe(parent, args, context, info) {
-  console.log('newCourseSubscribe');
-  try {
-    const results = await context.db.subscription.course(
-      {
-        where: {
-          mutation_in: ['CREATED']
-        }
-      },
-      info
-    );
-    return results;
-  } catch (err) {
-    console.error(err);
-    throw new Error(err);
-  }
+function newCourseSubsribe(parent, args, context, info) {
+  return context.db.subscription.course(
+    {
+      where: {
+        mutation_in: ['CREATED']
+      }
+    },
+    info
+  );
 }
 const newCourse = {
   subscribe: newCourseSubsribe
