@@ -36,5 +36,5 @@ type Mutation {
   login(email: String!, password: String!): AuthPayload
 }
 type Subscription {
-  newCourse: CourseSubscriptionPayload
+  course(where: CourseSubscriptionWhereInput): CourseSubscriptionPayload
 }

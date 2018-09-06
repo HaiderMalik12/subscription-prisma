@@ -3602,6 +3602,10 @@ pinkie@^2.0.0:
   version "2.0.4"
   resolved "https://registry.yarnpkg.com/pinkie/-/pinkie-2.0.4.tgz#72556b80cfa0d48a974e80e77248e80ed4f7f870"
 
+pluralize@^7.0.0:
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/pluralize/-/pluralize-7.0.0.tgz#298b89df8b93b0221dbf421ad2b1b1ea23fc6777"
+
 portfinder@^1.0.13:
   version "1.0.17"
   resolved "https://registry.yarnpkg.com/portfinder/-/portfinder-1.0.17.tgz#a8a1691143e46c4735edefcf4fbcccedad26456a"
@@ -3652,9 +3656,9 @@ prisma-binding@2.1.4:
     subscriptions-transport-ws "0.9.8"
     yargs "12.0.1"
 
-prisma-cli-core@1.0.55:
-  version "1.0.55"
-  resolved "https://registry.yarnpkg.com/prisma-cli-core/-/prisma-cli-core-1.0.55.tgz#ed494d4137ce42a42626a1bbbe4ac66ebbef4318"
+prisma-cli-core@1.0.75:
+  version "1.0.75"
+  resolved "https://registry.yarnpkg.com/prisma-cli-core/-/prisma-cli-core-1.0.75.tgz#7a65f859a1c8d7a89397349d5d35eb622ed26e62"
   dependencies:
     adm-zip "^0.4.7"
     archiver "^2.0.3"
@@ -3687,9 +3691,9 @@ prisma-cli-core@1.0.55:
     opn "^5.1.0"
     pause "^0.1.0"
     portfinder "^1.0.13"
-    prisma-db-introspection "0.0.24"
+    prisma-db-introspection "0.0.45"
     prisma-json-schema "0.0.4"
-    prisma-yml "1.0.69"
+    prisma-yml "1.0.90"
     scuid "^1.0.2"
     semver "^5.4.1"
     sillyname "^0.1.0"
@@ -3698,9 +3702,9 @@ prisma-cli-core@1.0.55:
     util.promisify "^1.0.0"
     validator "^8.2.0"
 
-prisma-cli-engine@1.0.58:
-  version "1.0.58"
-  resolved "https://registry.yarnpkg.com/prisma-cli-engine/-/prisma-cli-engine-1.0.58.tgz#0d33d7f7dbd930f35d33bde4c4dee99b7cd24afb"
+prisma-cli-engine@1.0.78:
+  version "1.0.78"
+  resolved "https://registry.yarnpkg.com/prisma-cli-engine/-/prisma-cli-engine-1.0.78.tgz#ec1cbf20cc5a6e17561d38283515c64d61a07d44"
   dependencies:
     "@heroku/linewrap" "^1.0.0"
     ajv "5"
@@ -3742,7 +3746,7 @@ prisma-cli-engine@1.0.58:
     memfs "^2.5.3"
     opn "^5.1.0"
     prisma-json-schema "0.0.4"
-    prisma-yml "1.0.69"
+    prisma-yml "1.0.90"
     raven "2.3.0"
     replaceall "^0.1.6"
     rwlockfile "^1.4.8"
@@ -3757,9 +3761,9 @@ prisma-cli-engine@1.0.58:
     update-notifier "^2.3.0"
     validator "^8.2.0"
 
-prisma-db-introspection@0.0.24:
-  version "0.0.24"
-  resolved "https://registry.yarnpkg.com/prisma-db-introspection/-/prisma-db-introspection-0.0.24.tgz#e3f8f461a65accfa65d91cdb786a1289e9f1c1da"
+prisma-db-introspection@0.0.45:
+  version "0.0.45"
+  resolved "https://registry.yarnpkg.com/prisma-db-introspection/-/prisma-db-introspection-0.0.45.tgz#3a0094643881df76c66bccdf97d8dc38f05cd692"
   dependencies:
     ajv "5"
     bluebird "^3.5.1"
@@ -3774,9 +3778,11 @@ prisma-db-introspection@0.0.24:
     jsonwebtoken "^8.1.0"
     lodash "^4.17.4"
     pg "^7.4.1"
+    pluralize "^7.0.0"
     prisma-json-schema "^0.0.1"
     replaceall "^0.1.6"
     scuid "^1.0.2"
+    uppercamelcase "^3.0.0"
     yaml-ast-parser "^0.0.40"
 
 prisma-json-schema@0.0.4:
@@ -3810,9 +3816,9 @@ prisma-yml@1.0.50:
     scuid "^1.0.2"
     yaml-ast-parser "^0.0.40"
 
-prisma-yml@1.0.69:
-  version "1.0.69"
-  resolved "https://registry.yarnpkg.com/prisma-yml/-/prisma-yml-1.0.69.tgz#2cccbc584ccfcc8d0f99765279434bd0f3b41bfd"
+prisma-yml@1.0.90:
+  version "1.0.90"
+  resolved "https://registry.yarnpkg.com/prisma-yml/-/prisma-yml-1.0.90.tgz#dd9464145e5190ad90a1f028fc81a339cff4d03e"
   dependencies:
     ajv "5"
     bluebird "^3.5.1"
@@ -3833,13 +3839,13 @@ prisma-yml@1.0.69:
     scuid "^1.0.2"
     yaml-ast-parser "^0.0.40"
 
-prisma@1.12.0:
-  version "1.12.0"
-  resolved "https://registry.yarnpkg.com/prisma/-/prisma-1.12.0.tgz#b96b8610ffb85f27b0fb3148c5bad26ffbde924a"
+prisma@^1.15.3:
+  version "1.15.3"
+  resolved "https://registry.yarnpkg.com/prisma/-/prisma-1.15.3.tgz#e532a53ed3c5e4ba8ae99f6e456933c2e9f4852d"
   dependencies:
     fs-extra "^5.0.0"
-    prisma-cli-core "1.0.55"
-    prisma-cli-engine "1.0.58"
+    prisma-cli-core "1.0.75"
+    prisma-cli-engine "1.0.78"
     semver "^5.4.1"
     source-map-support "^0.4.18"
 
@@ -4760,6 +4766,12 @@ upper-case-first@^1.1.0, upper-case-first@^1.1.2:
 upper-case@^1.0.3, upper-case@^1.1.0, upper-case@^1.1.1, upper-case@^1.1.3:
   version "1.1.3"
   resolved "https://registry.yarnpkg.com/upper-case/-/upper-case-1.1.3.tgz#f6b4501c2ec4cdd26ba78be7222961de77621598"
+
+uppercamelcase@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/uppercamelcase/-/uppercamelcase-3.0.0.tgz#380b321b8d73cba16fec4d752a575152d1ef7317"
+  dependencies:
+    camelcase "^4.1.0"
 
 uri-js@^4.2.2:
   version "4.2.2"
